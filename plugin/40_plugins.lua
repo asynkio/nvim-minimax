@@ -55,6 +55,9 @@ now_if_args(function()
     'lua',
     'vimdoc',
     'markdown',
+    'bash',
+    'zsh',
+    'fish',
     -- Add here more languages with which you want to use tree-sitter
     -- To see available languages:
     -- - Execute `:=require('nvim-treesitter').get_available()`
@@ -107,6 +110,10 @@ now_if_args(function()
     -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
     -- Lua
     'lua_ls',
+    -- Bash, Zsh
+    'shuck',
+    -- Fish
+    'fish_lsp',
   })
 end)
 
@@ -134,6 +141,8 @@ later(function()
     -- Make sure that necessary CLI tool is available
     formatters_by_ft = {
       lua = { 'stylua' },
+      bash = { 'shfmt' },
+      fish = { 'fish_indent' },
     },
   })
 end)
