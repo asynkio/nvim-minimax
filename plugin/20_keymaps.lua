@@ -19,6 +19,12 @@ end
 nmap('[p', '<Cmd>exe "iput! " . v:register<CR>', 'Paste Above')
 nmap(']p', '<Cmd>exe "iput "  . v:register<CR>', 'Paste Below')
 
+-- Use <S-ArrowKeys> fow window navigation
+nmap('<S-Left>',  '<C-w>h', 'Focus on left window')
+nmap('<S-Down>',  '<C-w>j', 'Focus on below window')
+nmap('<S-Up>',    '<C-w>k', 'Focus on above window')
+nmap('<S-Right>', '<C-w>l', 'Focus on right window')
+
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
 -- stylua: ignore start
