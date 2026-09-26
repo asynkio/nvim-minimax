@@ -63,6 +63,7 @@ now_if_args(function()
     'rust',
     'c',
     'cpp',
+    'go',
     -- Add here more languages with which you want to use tree-sitter
     -- To see available languages:
     -- - Execute `:=require('nvim-treesitter').get_available()`
@@ -128,6 +129,8 @@ now_if_args(function()
     'rust_analyzer',
     -- C/C++
     'clangd',
+    -- Go
+    'gopls',
   })
 end)
 
@@ -162,6 +165,7 @@ later(function()
       rust = { 'rustfmt' },
       c = { 'clang-format' },
       cpp = { 'clang-format' },
+      go = { 'gofmt' },
     },
   })
 end)
