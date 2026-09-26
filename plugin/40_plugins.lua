@@ -68,6 +68,7 @@ now_if_args(function()
     'css',
     'javascript',
     'typescript',
+    'typst',
     -- Add here more languages with which you want to use tree-sitter
     -- To see available languages:
     -- - Execute `:=require('nvim-treesitter').get_available()`
@@ -141,6 +142,8 @@ now_if_args(function()
     'csskit',
     -- JavaScript/TypeScript
     'vtsls',
+    -- Typst
+    'tinymist',
   })
 end)
 
@@ -180,6 +183,7 @@ later(function()
       css = { 'prettierd' },
       javascript = { 'prettierd' },
       typescript = { 'prettierd' },
+      typst = { 'typstyle' },
     },
   })
 end)
@@ -194,6 +198,33 @@ end)
 -- 'mini.snippets' is designed to work with it as seamlessly as possible.
 -- See `:h MiniSnippets.gen_loader.from_lang()`.
 later(function() add({ 'https://github.com/rafamadriz/friendly-snippets' }) end)
+
+-- Typst preview ==============================================================
+
+-- 'chomosuke/typst-preview.nvim' provides live preview of Typst documents in
+-- a browser with low latency, cross-jump between code and preview, and cursor
+-- following. It is powered by 'tinymist' and 'websocat' binaries.
+--
+-- Both binaries are taken from the system (instead of being downloaded by the
+-- plugin): 'tinymist' is already used for LSP above, 'websocat' is a WebSocket
+-- client used to talk to the preview server.
+--
+-- Buffer-local mappings for Typst files are defined in 'after/ftplugin/typst.lua'.
+-- See also: https://github.com/chomosuke/typst-preview.nvim
+later(function()
+  add({
+    {
+      src = 'https://github.com/chomosuke/typst-preview.nvim',
+      -- Upstream recommends pinning the major version (i.e. any '1.x.y' tag)
+      version = vim.version.range('1.*'),
+    },
+  })
+
+  require('typst-preview').setup({
+    -- Use system provided binaries; skip plugin's download step
+    dependencies_bin = { tinymist = 'tinymist', websocat = 'websocat' },
+  })
+end)
 
 -- Honorable mentions =========================================================
 
