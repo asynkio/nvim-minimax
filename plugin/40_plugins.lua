@@ -64,6 +64,10 @@ now_if_args(function()
     'c',
     'cpp',
     'go',
+    'html',
+    'css',
+    'javascript',
+    'typescript',
     -- Add here more languages with which you want to use tree-sitter
     -- To see available languages:
     -- - Execute `:=require('nvim-treesitter').get_available()`
@@ -131,6 +135,12 @@ now_if_args(function()
     'clangd',
     -- Go
     'gopls',
+    -- HTML
+    'html',
+    -- CSS
+    'csskit',
+    -- JavaScript/TypeScript
+    'vtsls',
   })
 end)
 
@@ -166,6 +176,10 @@ later(function()
       c = { 'clang-format' },
       cpp = { 'clang-format' },
       go = { 'gofmt' },
+      html = { 'prettierd' },
+      css = { 'prettierd' },
+      javascript = { 'prettierd' },
+      typescript = { 'prettierd' },
     },
   })
 end)
