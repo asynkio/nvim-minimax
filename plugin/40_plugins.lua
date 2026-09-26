@@ -60,6 +60,7 @@ now_if_args(function()
     'fish',
     'toml',
     'python',
+    'rust',
     -- Add here more languages with which you want to use tree-sitter
     -- To see available languages:
     -- - Execute `:=require('nvim-treesitter').get_available()`
@@ -121,6 +122,8 @@ now_if_args(function()
     -- Python
     'pyright',
     'ruff',
+    -- Rust
+    'rust_analyzer',
   })
 end)
 
@@ -152,6 +155,7 @@ later(function()
       fish = { 'fish_indent' },
       toml = { 'taplo' },
       python = { 'ruff' },
+      rust = { 'rustfmt' },
     },
   })
 end)
