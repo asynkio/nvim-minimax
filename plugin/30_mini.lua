@@ -329,8 +329,14 @@ later(function() require('mini.align').setup() end)
 -- It is not enabled by default because its effects are a matter of taste.
 -- Also scroll and resize have some unwanted side effects (see `:h mini.animate`).
 -- Uncomment next line (use `gcc`) to enable.
-later(function() require("mini.animate").setup({
+later(function()
+  local animate = require('mini.animate')
+  animate.setup({
     cursor = { enable = false },
+    -- Faster vertical scroll animation (default total duration is 250ms).
+    scroll = {
+      timing = animate.gen_timing.linear({ duration = 100, unit = 'total' }),
+    },
   })
 end)
 
