@@ -226,6 +226,33 @@ later(function()
   })
 end)
 
+-- Input method ===============================================================
+
+-- 'keaising/im-select.nvim' switches the system input method based on Neovim's
+-- edit mode: English in Normal and Command-line modes, previously used one in
+-- Insert mode. It relies on external binaries: 'fcitx5-remote' (Fcitx5, used
+-- here), 'fcitx-remote', 'ibus' (Linux), 'macism' (macOS), or 'im-select.exe'
+-- (Windows/WSL).
+--
+-- Current input method name can be checked with `fcitx5-remote -n`; with the
+-- default Fcitx5 setup the English one is 'keyboard-us'.
+--
+-- See also: https://github.com/keaising/im-select.nvim
+later(function()
+  add({ 'https://github.com/keaising/im-select.nvim' })
+
+  require('im_select').setup({
+    -- Input method to use in Normal and Command-line modes
+    default_im_select = 'keyboard-us',
+    default_command = 'fcitx5-remote',
+    -- `set_default_events` default is { 'InsertLeave', 'CmdlineLeave' },
+    -- which restores 'default_im_select' when leaving these modes
+    set_default_events = { 'InsertLeave', 'CmdlineLeave' },
+    -- Restore input method used before entering Insert mode
+    set_previous_events = { 'InsertEnter' },
+  })
+end)
+
 -- Honorable mentions =========================================================
 
 -- 'mason-org/mason.nvim' (a.k.a. "Mason") is a great tool (package manager) for
