@@ -202,8 +202,8 @@ end)
 -- - `<Leader>ef` - open directory of current file (needs to be present on disk)
 --
 -- Basic navigation:
--- - `l` - go in entry at cursor: navigate into directory or open file
--- - `h` - go out of focused directory
+-- - `<Right>` - go in entry at cursor: navigate into directory or open file
+-- - `<Left>` - go out of focused directory
 -- - Navigate window as any regular buffer
 -- - Press `g?` inside explorer to see more mappings
 --
@@ -219,9 +219,12 @@ end)
 -- - `:h MiniFiles-navigation` - more details about how to navigate
 -- - `:h MiniFiles-manipulation` - more details about how to manipulate
 -- - `:h MiniFiles-examples` - examples of common setups
-now_if_args(function()
+now(function()
   -- Enable directory/file preview
-  require('mini.files').setup({ windows = { preview = true } })
+  require("mini.files").setup({
+    windows = { preview = true },
+    mappings = { go_in = "<Right>", go_out = "<Left>" },
+  })
 
   -- Add common bookmarks for every explorer. Example usage inside explorer:
   -- - `'c` to navigate into your config directory
