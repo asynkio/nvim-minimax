@@ -139,7 +139,7 @@ now_if_args(function()
     -- HTML
     'html',
     -- CSS
-    'csskit',
+    'cssls',
     -- JavaScript/TypeScript
     'vtsls',
     -- Typst
