@@ -118,13 +118,17 @@ now_if_args(function()
   -- Use `:h vim.lsp.enable()` to automatically enable language server based on
   -- the rules provided by 'nvim-lspconfig'.
   -- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
-  -- Keep one shared list; only enable servers whose command is installed.
+  -- Keep one shared list and enable it as is. A server whose command is not
+  -- installed only fails when a matching file is opened, so filtering the list
+  -- by `vim.fn.executable()` only hides real configuration mistakes.
   local servers = {
     -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
     -- Lua
     'lua_ls',
     -- Bash, Zsh
     'shuck',
+    -- Fish
+    'fish_lsp',
     -- TOML
     'taplo',
     -- Python
@@ -145,17 +149,7 @@ now_if_args(function()
     -- Typst
     'tinymist',
   }
-  -- Fish requires a Unix environment; retain syntax highlighting everywhere.
-  if not is_windows then table.insert(servers, 'fish_lsp') end
-  for _, name in ipairs(servers) do
-    local config = vim.lsp.config[name]
-    -- HTML uses a command factory to also support project-local installs.
-    local command = config and type(config.cmd) == 'table' and config.cmd[1]
-      or (name == 'html' and 'vscode-html-language-server')
-    if command and executable(command) then
-      vim.lsp.enable(name)
-    end
-  end
+  vim.lsp.enable(servers)
 end)
 
 -- Formatting =================================================================
@@ -183,7 +177,7 @@ later(function()
     formatters_by_ft = {
       lua = { 'stylua' },
       bash = { 'shfmt' },
-      fish = not is_windows and executable('fish_indent') and { 'fish_indent' } or {},
+      fish = { 'fish_indent' },
       toml = { 'taplo' },
       python = { 'ruff' },
       rust = { 'rustfmt' },
