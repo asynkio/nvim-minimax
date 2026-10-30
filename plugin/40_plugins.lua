@@ -11,6 +11,8 @@
 -- Make concise helpers for installing/adding plugins in two stages
 local add = vim.pack.add
 local now_if_args, later = Config.now_if_args, Config.later
+local is_windows = vim.fn.has('win32') == 1
+local executable = function(command) return vim.fn.executable(command) == 1 end
 
 -- Tree-sitter ================================================================
 
@@ -116,8 +118,10 @@ now_if_args(function()
   -- Use `:h vim.lsp.enable()` to automatically enable language server based on
   -- the rules provided by 'nvim-lspconfig'.
   -- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
-  -- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
-  vim.lsp.enable({
+  -- Keep one shared list and enable it as is. A server whose command is not
+  -- installed only fails when a matching file is opened, so filtering the list
+  -- by `vim.fn.executable()` only hides real configuration mistakes.
+  local servers = {
     -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
     -- Lua
     'lua_ls',
@@ -144,7 +148,8 @@ now_if_args(function()
     'vtsls',
     -- Typst
     'tinymist',
-  })
+  }
+  vim.lsp.enable(servers)
 end)
 
 -- Formatting =================================================================
@@ -230,21 +235,30 @@ end)
 
 -- 'keaising/im-select.nvim' switches the system input method based on Neovim's
 -- edit mode: English in Normal and Command-line modes, previously used one in
--- Insert mode. It relies on external binaries: 'fcitx5-remote' (Fcitx5, used
--- here), 'fcitx-remote', 'ibus' (Linux), 'macism' (macOS), or 'im-select.exe'
--- (Windows/WSL).
+-- Insert mode. This config uses 'fcitx5-remote' on Linux and 'im-select.exe'
+-- on Windows.
 --
 -- Current input method name can be checked with `fcitx5-remote -n`; with the
 -- default Fcitx5 setup the English one is 'keyboard-us'.
 --
 -- See also: https://github.com/keaising/im-select.nvim
 later(function()
+  -- Keep platform-specific input method commands and identifiers together.
+  -- Skip integration when the corresponding system tool is not installed.
+  local input_method
+  if is_windows and executable('im-select') then
+    input_method = { default_command = 'im-select', default_im_select = '1033' }
+  elseif vim.fn.has('linux') == 1 and executable('fcitx5-remote') then
+    input_method = { default_command = 'fcitx5-remote', default_im_select = 'keyboard-us' }
+  end
+  if not input_method then return end
+
   add({ 'https://github.com/keaising/im-select.nvim' })
 
   require('im_select').setup({
     -- Input method to use in Normal and Command-line modes
-    default_im_select = 'keyboard-us',
-    default_command = 'fcitx5-remote',
+    default_im_select = input_method.default_im_select,
+    default_command = input_method.default_command,
     -- `set_default_events` default is { 'InsertLeave', 'CmdlineLeave' },
     -- which restores 'default_im_select' when leaving these modes
     set_default_events = { 'InsertLeave', 'CmdlineLeave' },
